@@ -1,0 +1,14 @@
+locations:
+  town:
+    spawn:
+      x: 1
+      y: 2
+      z: 3
+    portals:
+      park:
+        x1: 0
+        x2: 1
+        y1: 2
+        y2: 3
+        z1: 4
+        z2: 5

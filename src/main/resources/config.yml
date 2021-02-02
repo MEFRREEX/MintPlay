@@ -1,0 +1,71 @@
+registration:
+  title: "Регистрация"
+  label: "Добро пожаловать на §2MintPlay §r- сервер ролевой игры в тематике средневековья! Для начала игры Вам необходимо зарегистрироваться."
+  error: "Пароль должен содержать латинские буквы, цифры и быть от 8 символов в длину."
+  success: "Вы успешно зарегистрировались на сервере. Приятной игры!"
+
+login:
+  title: "Вход"
+  label: "Добро пожаловать на сервер! Для входа в аккаунт Вам необходимо ввести пароль."
+  error: "Неверный пароль."
+  success: "Вы успешно вошли в аккаунт. Приятной игры!"
+
+input:
+  name: "Пароль"
+  placeholder: "Введите пароль"
+
+exit:
+  title: "Выход"
+  content: "Вы уверены, что хотите выйти?"
+
+locations:
+  town:
+    name: "Город"
+    spawn:
+      x: 2444
+      y: 80
+      z: 2364
+      side: 0
+    portals:
+      park:
+        boundingBox:
+          minX: 2432
+          minY: 80
+          minZ: 2408
+          maxX: 2435
+          maxY: 84
+          maxZ: 2408
+        floatingText:
+          x: 0
+          y: 0
+          z: 0
+        spawn:
+          x: 972
+          y: 47
+          z: 912
+          side: 1
+  park:
+    name: "Парк"
+    spawn:
+      x: 972
+      y: 47
+      z: 912
+      side: 0
+    portals:
+      town:
+        boundingBox:
+          minX: 974
+          minY: 47
+          minZ: 910
+          maxX: 974
+          maxY: 52
+          maxZ: 914
+        floatingText:
+          x: 0
+          y: 0
+          z: 0
+        spawn:
+          x: 2433.5
+          y: 80
+          z: 2406
+          side: 2
