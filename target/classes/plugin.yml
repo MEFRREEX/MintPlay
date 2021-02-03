@@ -1,6 +1,0 @@
-name: MintPlay
-main: com.bestaford.mintplay.MintPlay
-version: "1.0-SNAPSHOT"
-api: "1.0.11"
-author: Bestaford
-load: POSTWORLD
