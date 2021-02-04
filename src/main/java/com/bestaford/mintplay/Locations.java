@@ -6,9 +6,11 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.player.PlayerInteractEvent;
+import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
+import cn.nukkit.level.particle.FloatingTextParticle;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.TextFormat;
@@ -26,6 +28,13 @@ public class Locations implements Listener {
     public Locations(MintPlay plugin) {
         this.plugin = plugin;
         loadLocations();
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerLocallyInitialized(PlayerLocallyInitializedEvent event) {
+        Player player = event.getPlayer();
+        addFloatingText(player, getLocation(player));
+        //TODO: fix slab quit/join bug, when player spawns under location
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -65,17 +74,35 @@ public class Locations implements Listener {
         }
     }
 
+    public Location getLocation(String name) {
+        return locations.get(name);
+    }
+
+    public Location getLocation(Level level) {
+        return getLocation(level.getName());
+    }
+
     public Location getLocation(Player player) {
-        return locations.get(player.getLevel().getName());
+        return getLocation(player.getLevel());
     }
 
     public void teleport(Player player, Spawn spawn) {
         player.setImmobile(true);
         player.addEffect(Effect.getEffect(Effect.BLINDNESS).setDuration(loadingTime));
         player.teleport(spawn);
+        addFloatingText(player, getLocation(spawn.getLevel()));
         plugin.getServer().getScheduler().scheduleDelayedTask(plugin, () -> {
             player.setImmobile(false);
             player.sendTitle(TextFormat.BOLD.toString() + TextFormat.YELLOW.toString() + getLocation(player).getName(), "", 20, loadingTime, 20);
         }, loadingTime);
+    }
+
+    public void addFloatingText(Player player, Location location) {
+        for(Map.Entry<String, Portal> portalEntry : location.getPortals().entrySet()) {
+            String portalName = portalEntry.getKey();
+            Portal portal = portalEntry.getValue();
+            Location targetLocation = getLocation(portalName);
+            location.getLevel().addParticle(new FloatingTextParticle(portal.getFloatingTextPosition(), TextFormat.YELLOW + targetLocation.getName(), TextFormat.YELLOW + "Игроков: " + targetLocation.getLevel().getPlayers().size()), player);
+        }
     }
 }

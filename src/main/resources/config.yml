@@ -36,9 +36,9 @@ locations:
           maxY: 84
           maxZ: 2408
         floatingText:
-          x: 0
-          y: 0
-          z: 0
+          x: 2434
+          y: 82.5
+          z: 2408
         spawn:
           x: 972
           y: 47
@@ -61,9 +61,9 @@ locations:
           maxY: 52
           maxZ: 914
         floatingText:
-          x: 0
-          y: 0
-          z: 0
+          x: 974
+          y: 50
+          z: 912.5
         spawn:
           x: 2433.5
           y: 80
