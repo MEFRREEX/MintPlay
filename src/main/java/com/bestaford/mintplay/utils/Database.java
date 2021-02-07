@@ -1,5 +1,6 @@
-package com.bestaford.mintplay;
+package com.bestaford.mintplay.utils;
 
+import com.bestaford.mintplay.MintPlay;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 

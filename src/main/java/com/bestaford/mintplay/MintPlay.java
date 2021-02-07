@@ -1,12 +1,14 @@
 package com.bestaford.mintplay;
 
 import cn.nukkit.plugin.PluginBase;
+import com.bestaford.mintplay.utils.Database;
 
 public class MintPlay extends PluginBase {
 
     public Database database;
     public Authorization authorization;
     public Locations locations;
+    public Scoreboards scoreboards;
 
     @Override
     public void onEnable() {
@@ -14,7 +16,9 @@ public class MintPlay extends PluginBase {
         database = new Database(this, "players");
         authorization = new Authorization(this);
         locations = new Locations(this);
+        scoreboards = new Scoreboards(this);
         getServer().getPluginManager().registerEvents(authorization, this);
         getServer().getPluginManager().registerEvents(locations, this);
+        getServer().getPluginManager().registerEvents(scoreboards, this);
     }
 }

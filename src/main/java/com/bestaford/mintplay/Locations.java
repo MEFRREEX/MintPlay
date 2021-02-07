@@ -5,6 +5,7 @@ import cn.nukkit.block.Block;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.block.LeavesDecayEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
@@ -61,6 +62,11 @@ public class Locations implements Listener {
             Block block = event.getBlock();
             player.sendMessage("x: " + block.getX() + " y: " + block.getY() + " z: " + block.getZ() + " id: " + block.getId() + " damage: " + block.getDamage() + " yaw: " + player.getYaw());
         }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onLeavesDecay(LeavesDecayEvent event) {
+        event.setCancelled(true);
     }
 
     public void loadLocations() {

@@ -18,6 +18,12 @@ exit:
   title: "Выход"
   content: "Вы уверены, что хотите выйти?"
 
+scoreboard:
+  title: "Title"
+  lines:
+    - "line1"
+    - "line2"
+
 locations:
   town:
     name: "Город"
