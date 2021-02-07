@@ -97,6 +97,7 @@ public class Locations implements Listener {
         player.addEffect(Effect.getEffect(Effect.BLINDNESS).setDuration(loadingTime));
         player.teleport(spawn);
         addFloatingText(player, getLocation(spawn.getLevel()));
+        plugin.scoreboards.updateScoreboard(player);
         plugin.getServer().getScheduler().scheduleDelayedTask(plugin, () -> {
             player.setImmobile(false);
             player.sendTitle(TextFormat.BOLD.toString() + TextFormat.YELLOW.toString() + getLocation(player).getName(), "", 20, loadingTime, 20);

@@ -44,12 +44,12 @@ public class Authorization implements Listener {
         ConfigSection inputSection = plugin.getConfig().getSection("input");
         ConfigSection registrationSection = plugin.getConfig().getSection("registration");
         CustomForm form = new CustomForm();
-        form.setTitle(registrationSection.getString("title"));
-        form.addLabel(registrationSection.getString("label"));
+        form.setTitle(plugin.replaceAll(registrationSection.getString("title"), player));
+        form.addLabel(plugin.replaceAll(registrationSection.getString("label"), player));
         if(error) {
-            form.addLabel(TextFormat.RED + registrationSection.getString("error"));
+            form.addLabel(TextFormat.RED + plugin.replaceAll(registrationSection.getString("error"), player));
         }
-        form.addInput(inputSection.getString("name"), inputSection.getString("placeholder"), oldPassword);
+        form.addInput(plugin.replaceAll(inputSection.getString("name"), player), plugin.replaceAll(inputSection.getString("placeholder"), player), oldPassword);
         form.send(player, (targetPlayer, targetForm, data) -> {
             if(data == null) {
                 sendRegistrationExitForm(targetPlayer);
@@ -57,7 +57,7 @@ public class Authorization implements Listener {
             }
             String password = (String) data.get(error ? 2 : 1);
             if(register(targetPlayer, password)) {
-                targetPlayer.sendMessage(TextFormat.GREEN + registrationSection.getString("success"));
+                targetPlayer.sendMessage(TextFormat.GREEN + plugin.replaceAll(registrationSection.getString("success"), player));
                 login(player, password);
             } else {
                 sendRegistrationForm(targetPlayer, true, password);
@@ -67,7 +67,7 @@ public class Authorization implements Listener {
 
     public void sendRegistrationExitForm(Player player) {
         ConfigSection exitSection = plugin.getConfig().getSection("exit");
-        ModalForm form = new ModalForm(exitSection.getString("title"), exitSection.getString("content"), "Да", "Нет");
+        ModalForm form = new ModalForm(plugin.replaceAll(exitSection.getString("title"), player), plugin.replaceAll(exitSection.getString("content"), player), "Да", "Нет");
         form.send(player, (targetPlayer, targetForm, data) -> {
             if(data == -1) {
                 sendRegistrationForm(targetPlayer, false, "");
@@ -123,12 +123,12 @@ public class Authorization implements Listener {
         ConfigSection inputSection = plugin.getConfig().getSection("input");
         ConfigSection loginSection = plugin.getConfig().getSection("login");
         CustomForm form = new CustomForm();
-        form.setTitle(loginSection.getString("title"));
-        form.addLabel(loginSection.getString("label"));
+        form.setTitle(plugin.replaceAll(loginSection.getString("title"), player));
+        form.addLabel(plugin.replaceAll(loginSection.getString("label"), player));
         if(error) {
-            form.addLabel(TextFormat.RED + loginSection.getString("error"));
+            form.addLabel(TextFormat.RED + plugin.replaceAll(loginSection.getString("error"), player));
         }
-        form.addInput(inputSection.getString("name"), inputSection.getString("placeholder"), "");
+        form.addInput(plugin.replaceAll(inputSection.getString("name"), player), plugin.replaceAll(inputSection.getString("placeholder"), player), "");
         form.send(player, (targetPlayer, targetForm, data) -> {
             if(data == null) {
                 sendLoginExitForm(targetPlayer);
@@ -136,7 +136,7 @@ public class Authorization implements Listener {
             }
             String password = (String) data.get(error ? 2 : 1);
             if(login(targetPlayer, password)) {
-                targetPlayer.sendMessage(TextFormat.GREEN + loginSection.getString("success"));
+                targetPlayer.sendMessage(TextFormat.GREEN + plugin.replaceAll(loginSection.getString("success"), player));
             } else {
                 sendLoginForm(targetPlayer, true);
             }
@@ -145,7 +145,7 @@ public class Authorization implements Listener {
 
     public void sendLoginExitForm(Player player) {
         ConfigSection exit = plugin.getConfig().getSection("exit");
-        ModalForm form = new ModalForm(exit.getString("title"), exit.getString("content"), "Да", "Нет");
+        ModalForm form = new ModalForm(plugin.replaceAll(exit.getString("title"), player), plugin.replaceAll(exit.getString("content"), player), "Да", "Нет");
         form.send(player, (targetPlayer, targetForm, data) -> {
             if(data == -1) {
                 sendLoginForm(targetPlayer, false);
