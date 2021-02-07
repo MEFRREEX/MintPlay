@@ -4,3 +4,6 @@ version: "1.0-SNAPSHOT"
 api: "1.0.11"
 author: Bestaford
 load: POSTWORLD
+depend:
+  - FormAPI
+  - ScoreboardAPI
