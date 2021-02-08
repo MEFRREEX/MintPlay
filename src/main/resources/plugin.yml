@@ -6,4 +6,4 @@ author: Bestaford
 load: POSTWORLD
 depend:
   - FormAPI
-  - ScoreboardPlugin
+  - ScoreboardAPI
