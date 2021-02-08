@@ -24,6 +24,7 @@ public class MintPlay extends PluginBase {
         getServer().getPluginManager().registerEvents(authorization, this);
         getServer().getPluginManager().registerEvents(locations, this);
         getServer().getPluginManager().registerEvents(scoreboards, this);
+        //TODO: compile ScoreboardAPI plugin for 1.0.11 nukkit api
     }
 
     public String replaceAll(String text, Player player) {
@@ -33,6 +34,9 @@ public class MintPlay extends PluginBase {
         text = text.replaceAll("%max", String.valueOf(getServer().getMaxPlayers()));
         text = text.replaceAll("%name", player.getName());
         text = text.replaceAll("%time", new SimpleDateFormat("HH:mm").format(new Date()));
+        text = text.replaceAll("%date", new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
+        text = text.replaceAll("%tps", getServer().getTicksPerSecond() + " (" + getServer().getTickUsage() + ")");
+        text = text.replaceAll("%avg", getServer().getTicksPerSecondAverage() + " (" + getServer().getTickUsageAverage() + ")");
         return text;
     }
 }
