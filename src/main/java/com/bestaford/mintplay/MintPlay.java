@@ -42,11 +42,15 @@ public class MintPlay extends PluginBase {
         remove(location);
         Spawn spawn = location.getSpawn();
         CompoundTag nbt = Entity.getDefaultNBT(spawn);
+
         Path path = getDataFolder().toPath();
+        Path skinPath = path.resolve("model-texture.png");
+        Path geometryPath = path.resolve("model-geometry.json");
+
         Skin skin = new Skin();
-        skin.setSkinData(ImageIO.read(path.resolve("model-texture.png").toFile()));
+        skin.setSkinData(ImageIO.read(skinPath.toFile()));
         skin.setGeometryName("geometry.coin-model");
-        skin.setGeometryData(new String(Files.readAllBytes(path.resolve("model-geometry.json"))));
+        skin.setGeometryData(new String(Files.readAllBytes(geometryPath)));
         CompoundTag skinTag = new CompoundTag()
                 .putByteArray("Data", skin.getSkinData().data)
                 .putInt("SkinImageWidth", skin.getSkinData().width)
