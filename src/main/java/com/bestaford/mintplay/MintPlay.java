@@ -39,29 +39,26 @@ public class MintPlay extends PluginBase {
         //TODO: compile ScoreboardAPI plugin for 1.0.11 nukkit api
 
         try {
+            Entity.registerEntity("Model", Model.class);
         Location location = locations.getLocation("town");
         remove(location);
         Spawn spawn = location.getSpawn();
-        CompoundTag nbt = Entity.getDefaultNBT(spawn);
-
         String name = "coin-model";
         Path path = getDataFolder().toPath();
         Path skinPath = path.resolve("model-texture.png");
         Path geometryPath = path.resolve("model-geometry.json");
         Skin skin = Model.createSkin(name, skinPath, geometryPath);
-
-        CompoundTag skinTag = new CompoundTag()
-                .putByteArray("Data", skin.getSkinData().data)
-                .putInt("SkinImageWidth", skin.getSkinData().width)
-                .putInt("SkinImageHeight", skin.getSkinData().height)
-                .putString("ModelId", skin.getSkinId())
-                .putByteArray("SkinResourcePatch", skin.getSkinResourcePatch().getBytes(StandardCharsets.UTF_8))
-                .putByteArray("GeometryData", skin.getGeometryData().getBytes(StandardCharsets.UTF_8))
-                .putBoolean("IsTrustedSkin", true);
-        nbt.putString("NameTag", name);
-        nbt.putCompound("Skin", skinTag);
-        EntityHuman model = new EntityHuman(spawn.getChunk(), nbt);
-        model.spawnToAll();
+            CompoundTag nbt = Entity.getDefaultNBT(spawn);
+            CompoundTag skinTag = new CompoundTag()
+                    .putByteArray("Data", skin.getSkinData().data)
+                    .putInt("SkinImageWidth", skin.getSkinData().width)
+                    .putInt("SkinImageHeight", skin.getSkinData().height)
+                    .putString("ModelId", skin.getSkinId())
+                    .putByteArray("SkinResourcePatch", skin.getSkinResourcePatch().getBytes(StandardCharsets.UTF_8))
+                    .putByteArray("GeometryData", skin.getGeometryData().getBytes(StandardCharsets.UTF_8))
+                    .putBoolean("IsTrustedSkin", true);
+            nbt.putCompound("Skin", skinTag);
+            Model model = new Model(spawn.getChunk(), nbt);
     } catch (Exception exception) {
         getLogger().error(exception.getMessage());
     }
