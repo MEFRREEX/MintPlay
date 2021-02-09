@@ -5,16 +5,12 @@ import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Level;
-import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.plugin.PluginBase;
 import com.bestaford.mintplay.location.Location;
 import com.bestaford.mintplay.location.Spawn;
 import com.bestaford.mintplay.utils.Database;
 import com.bestaford.mintplay.utils.Model;
 
-import javax.imageio.ImageIO;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,6 +21,7 @@ public class MintPlay extends PluginBase {
     public Authorization authorization;
     public Locations locations;
     public Scoreboards scoreboards;
+    public Models models;
 
     @Override
     public void onEnable() {
@@ -33,35 +30,26 @@ public class MintPlay extends PluginBase {
         authorization = new Authorization(this);
         locations = new Locations(this);
         scoreboards = new Scoreboards(this);
+        models = new Models(this);
         getServer().getPluginManager().registerEvents(authorization, this);
         getServer().getPluginManager().registerEvents(locations, this);
         getServer().getPluginManager().registerEvents(scoreboards, this);
-        //TODO: compile ScoreboardAPI plugin for 1.0.11 nukkit api
-
+        getServer().getPluginManager().registerEvents(models, this);
         try {
-            Entity.registerEntity("Model", Model.class);
-        Location location = locations.getLocation("town");
-        remove(location);
-        Spawn spawn = location.getSpawn();
-        String name = "coin-model";
-        Path path = getDataFolder().toPath();
-        Path skinPath = path.resolve("model-texture.png");
-        Path geometryPath = path.resolve("model-geometry.json");
-        Skin skin = Model.createSkin(name, skinPath, geometryPath);
-            CompoundTag nbt = Entity.getDefaultNBT(spawn);
-            CompoundTag skinTag = new CompoundTag()
-                    .putByteArray("Data", skin.getSkinData().data)
-                    .putInt("SkinImageWidth", skin.getSkinData().width)
-                    .putInt("SkinImageHeight", skin.getSkinData().height)
-                    .putString("ModelId", skin.getSkinId())
-                    .putByteArray("SkinResourcePatch", skin.getSkinResourcePatch().getBytes(StandardCharsets.UTF_8))
-                    .putByteArray("GeometryData", skin.getGeometryData().getBytes(StandardCharsets.UTF_8))
-                    .putBoolean("IsTrustedSkin", true);
-            nbt.putCompound("Skin", skinTag);
-            Model model = new Model(spawn.getChunk(), nbt);
-    } catch (Exception exception) {
-        getLogger().error(exception.getMessage());
-    }
+            //TODO: cancelling damage on models, custom onClick runnable
+            //TODO: clean() method in Models module
+            Location location = locations.getLocation("town");
+            remove(location);
+            Spawn spawn = location.getSpawn();
+            String name = "coin-model";
+            Path path = getDataFolder().toPath();
+            Path skinPath = path.resolve("model-texture.png");
+            Path geometryPath = path.resolve("model-geometry.json");
+            Skin skin = Models.createSkin(name, skinPath, geometryPath);
+            Model model = Models.createModel(spawn, skin);
+        } catch (Exception exception) {
+            getLogger().error(exception.getMessage());
+        }
     }
 
     public String replaceAll(String text, Player player) {
