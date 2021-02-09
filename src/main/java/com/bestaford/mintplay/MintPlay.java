@@ -47,25 +47,16 @@ public class MintPlay extends PluginBase {
         skin.setSkinData(ImageIO.read(path.resolve("model-texture.png").toFile()));
         skin.setGeometryName("geometry.coin-model");
         skin.setGeometryData(new String(Files.readAllBytes(path.resolve("model-geometry.json"))));
-        skin.setTrusted(true);
         CompoundTag skinTag = new CompoundTag()
                 .putByteArray("Data", skin.getSkinData().data)
                 .putInt("SkinImageWidth", skin.getSkinData().width)
                 .putInt("SkinImageHeight", skin.getSkinData().height)
                 .putString("ModelId", skin.getSkinId())
-                .putString("CapeId", skin.getCapeId())
-                .putByteArray("CapeData", skin.getCapeData().data)
-                .putInt("CapeImageWidth", skin.getCapeData().width)
-                .putInt("CapeImageHeight", skin.getCapeData().height)
                 .putByteArray("SkinResourcePatch", skin.getSkinResourcePatch().getBytes(StandardCharsets.UTF_8))
                 .putString("GeometryName", "geometry.coin-model")
                 .putByteArray("GeometryData", skin.getGeometryData().getBytes(StandardCharsets.UTF_8))
-                .putByteArray("AnimationData", skin.getAnimationData().getBytes(StandardCharsets.UTF_8))
-                .putBoolean("PremiumSkin", skin.isPremium())
-                .putBoolean("PersonaSkin", skin.isPersona())
-                .putBoolean("IsTrustedSkin", skin.isTrusted())
-                .putBoolean("CapeOnClassicSkin", skin.isCapeOnClassic());
-        nbt.putString("NameTag", "geometry.coin-model 5");
+                .putBoolean("IsTrustedSkin", true);
+        nbt.putString("NameTag", "geometry.coin-model 6");
         nbt.putCompound("Skin", skinTag);
         EntityHuman model = new EntityHuman(spawn.getChunk(), nbt);
         model.spawnToAll();
