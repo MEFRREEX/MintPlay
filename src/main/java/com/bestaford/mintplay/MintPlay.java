@@ -53,10 +53,9 @@ public class MintPlay extends PluginBase {
                 .putInt("SkinImageHeight", skin.getSkinData().height)
                 .putString("ModelId", skin.getSkinId())
                 .putByteArray("SkinResourcePatch", skin.getSkinResourcePatch().getBytes(StandardCharsets.UTF_8))
-                .putString("GeometryName", "geometry.coin-model")
                 .putByteArray("GeometryData", skin.getGeometryData().getBytes(StandardCharsets.UTF_8))
                 .putBoolean("IsTrustedSkin", true);
-        nbt.putString("NameTag", "geometry.coin-model 6");
+        nbt.putString("NameTag", "geometry.coin-model 7");
         nbt.putCompound("Skin", skinTag);
         EntityHuman model = new EntityHuman(spawn.getChunk(), nbt);
         model.spawnToAll();
