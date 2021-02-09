@@ -10,6 +10,7 @@ import cn.nukkit.plugin.PluginBase;
 import com.bestaford.mintplay.location.Location;
 import com.bestaford.mintplay.location.Spawn;
 import com.bestaford.mintplay.utils.Database;
+import com.bestaford.mintplay.utils.Model;
 
 import javax.imageio.ImageIO;
 import java.nio.charset.StandardCharsets;
@@ -47,11 +48,8 @@ public class MintPlay extends PluginBase {
         Path path = getDataFolder().toPath();
         Path skinPath = path.resolve("model-texture.png");
         Path geometryPath = path.resolve("model-geometry.json");
+        Skin skin = Model.createSkin(name, skinPath, geometryPath);
 
-        Skin skin = new Skin();
-        skin.setSkinData(ImageIO.read(skinPath.toFile()));
-        skin.setGeometryName("geometry." + name);
-        skin.setGeometryData(new String(Files.readAllBytes(geometryPath)));
         CompoundTag skinTag = new CompoundTag()
                 .putByteArray("Data", skin.getSkinData().data)
                 .putInt("SkinImageWidth", skin.getSkinData().width)
