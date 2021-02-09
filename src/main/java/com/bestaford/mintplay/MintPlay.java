@@ -42,12 +42,11 @@ public class MintPlay extends PluginBase {
         remove(location);
         Spawn spawn = location.getSpawn();
         CompoundTag nbt = Entity.getDefaultNBT(spawn);
-        Skin skin = new Skin();
         Path path = getDataFolder().toPath();
+        Skin skin = new Skin();
+        skin.setSkinData(ImageIO.read(path.resolve("model-texture.png").toFile()));
         skin.setGeometryName("geometry.coin-model");
         skin.setGeometryData(new String(Files.readAllBytes(path.resolve("model-geometry.json"))));
-        skin.setSkinData(ImageIO.read(path.resolve("model-texture.png").toFile()));
-        skin.generateSkinId("coin-model");
         skin.setTrusted(true);
         CompoundTag skinTag = new CompoundTag()
                 .putByteArray("Data", skin.getSkinData().data)
@@ -66,7 +65,7 @@ public class MintPlay extends PluginBase {
                 .putBoolean("PersonaSkin", skin.isPersona())
                 .putBoolean("IsTrustedSkin", skin.isTrusted())
                 .putBoolean("CapeOnClassicSkin", skin.isCapeOnClassic());
-        nbt.putString("NameTag", "geometry.coin-model 4");
+        nbt.putString("NameTag", "geometry.coin-model 5");
         nbt.putCompound("Skin", skinTag);
         EntityHuman model = new EntityHuman(spawn.getChunk(), nbt);
         model.spawnToAll();
