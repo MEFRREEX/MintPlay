@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.entity.data.Skin;
+import cn.nukkit.level.Level;
 import cn.nukkit.nbt.tag.CompoundTag;
 import cn.nukkit.plugin.PluginBase;
 import com.bestaford.mintplay.location.Location;
@@ -38,15 +39,15 @@ public class MintPlay extends PluginBase {
 
         try {
         Location location = locations.getLocation("town");
+        remove(location);
         Spawn spawn = location.getSpawn();
         CompoundTag nbt = Entity.getDefaultNBT(spawn);
         Skin skin = new Skin();
         Path path = getDataFolder().toPath();
-        skin.generateSkinId("coin-model");
-        skin.setGeometryName(path.toString() + "/geometry.coin-model");
-        skin.setSkinResourcePatch("{\"geometry\":{\"default\":\"geometry.coin-model\"}}");
+        skin.setGeometryName("geometry.coin-model");
         skin.setGeometryData(new String(Files.readAllBytes(path.resolve("model-geometry.json"))));
         skin.setSkinData(ImageIO.read(path.resolve("model-texture.png").toFile()));
+        skin.generateSkinId("coin-model");
         skin.setTrusted(true);
         CompoundTag skinTag = new CompoundTag()
                 .putByteArray("Data", skin.getSkinData().data)
@@ -63,12 +64,11 @@ public class MintPlay extends PluginBase {
                 .putByteArray("AnimationData", skin.getAnimationData().getBytes(StandardCharsets.UTF_8))
                 .putBoolean("PremiumSkin", skin.isPremium())
                 .putBoolean("PersonaSkin", skin.isPersona())
-                .putBoolean("IsTrustedSkin", true)
+                .putBoolean("IsTrustedSkin", skin.isTrusted())
                 .putBoolean("CapeOnClassicSkin", skin.isCapeOnClassic());
-        nbt.putString("NameTag", "geometry.coin-model");
+        nbt.putString("NameTag", "geometry.coin-model 4");
         nbt.putCompound("Skin", skinTag);
         EntityHuman model = new EntityHuman(spawn.getChunk(), nbt);
-        model.setSkin(skin);
         model.spawnToAll();
     } catch (Exception exception) {
         getLogger().error(exception.getMessage());
@@ -86,5 +86,20 @@ public class MintPlay extends PluginBase {
         text = text.replaceAll("%tps", getServer().getTicksPerSecond() + " (" + getServer().getTickUsage() + ")");
         text = text.replaceAll("%avg", getServer().getTicksPerSecondAverage() + " (" + getServer().getTickUsageAverage() + ")");
         return text;
+    }
+
+    @Override
+    public void onDisable() {
+        remove(locations.getLocation("town"));
+    }
+
+    public void remove(Location location) {
+        Level level = location.getLevel();
+        for(Entity entity : level.getEntities()) {
+            if(entity instanceof EntityHuman) {
+                level.removeEntity(entity);
+                level.save();
+            }
+        }
     }
 }
