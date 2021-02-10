@@ -6,6 +6,7 @@ import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageEvent;
+import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.tag.CompoundTag;
 import com.bestaford.mintplay.utils.Model;
@@ -23,6 +24,17 @@ public class Models implements Listener {
     public Models(MintPlay plugin) {
         this.plugin = plugin;
         Entity.registerEntity("Model", Model.class);
+    }
+
+    public void clean() {
+        for(Level level : plugin.getServer().getLevels().values()) {
+            for(Entity entity : level.getEntities()) {
+                if(entity instanceof Model) {
+                    level.removeEntity(entity);
+                }
+            }
+            level.save();
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
