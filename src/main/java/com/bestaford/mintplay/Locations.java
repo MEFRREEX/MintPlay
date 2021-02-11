@@ -5,6 +5,7 @@ import cn.nukkit.block.Block;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.block.BlockIgniteEvent;
 import cn.nukkit.event.block.LeavesDecayEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
 import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
@@ -66,6 +67,11 @@ public class Locations implements Listener {
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onLeavesDecay(LeavesDecayEvent event) {
+        event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onBlockIgnite(BlockIgniteEvent event) {
         event.setCancelled(true);
     }
 
