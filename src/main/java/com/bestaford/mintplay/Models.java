@@ -2,10 +2,6 @@ package com.bestaford.mintplay;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
-import cn.nukkit.event.EventHandler;
-import cn.nukkit.event.EventPriority;
-import cn.nukkit.event.Listener;
-import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.tag.CompoundTag;
@@ -17,7 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public class Models implements Listener {
+public class Models {
 
     public MintPlay plugin;
 
@@ -35,11 +31,6 @@ public class Models implements Listener {
             }
             level.save();
         }
-    }
-
-    @EventHandler(priority = EventPriority.NORMAL)
-    public void onEntityDamage(EntityDamageEvent event) {
-        event.setCancelled(event.getEntity() instanceof Model);
     }
 
     public static Skin createSkin(String name, Path skinPath, Path geometryPath) throws IOException {

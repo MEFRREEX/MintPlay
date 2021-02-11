@@ -25,8 +25,9 @@ public class MintPlay extends PluginBase {
         getServer().getPluginManager().registerEvents(authorization, this);
         getServer().getPluginManager().registerEvents(locations, this);
         getServer().getPluginManager().registerEvents(scoreboards, this);
-        getServer().getPluginManager().registerEvents(models, this);
-        //TODO: replace model damage cancelling to Model class
+        //TODO: clean models in all locations
+        //TODO: refresh floating text info for all players when someone join portal
+        //TODO: use onPlayerJoin instead of onPlayerLocallyInitialized for online tag update
         models.clean();
     }
 
