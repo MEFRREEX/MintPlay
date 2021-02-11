@@ -4,6 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.utils.ConfigSection;
@@ -36,13 +37,17 @@ public class Scoreboards implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        updateTag("online", getOnline());
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerLocallyInitialized(PlayerLocallyInitializedEvent event) {
         Player player = event.getPlayer();
         tags.put(player, createTags(player));
         Scoreboard scoreboard = createScoreboard(player);
         scoreboard.showFor(player);
         scoreboards.put(player, scoreboard);
-        updateTag("online", getOnline());
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
