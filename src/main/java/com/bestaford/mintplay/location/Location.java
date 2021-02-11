@@ -1,8 +1,10 @@
 package com.bestaford.mintplay.location;
 
+import cn.nukkit.Player;
 import cn.nukkit.level.Level;
 import cn.nukkit.utils.ConfigSection;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,5 +41,9 @@ public class Location {
 
     public HashMap<String, Portal> getPortals() {
         return portals;
+    }
+
+    public Collection<Player> getPlayers() {
+        return level.getPlayers().values();
     }
 }

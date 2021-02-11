@@ -5,14 +5,17 @@ import cn.nukkit.block.Block;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
+import cn.nukkit.event.block.BlockBurnEvent;
 import cn.nukkit.event.block.BlockIgniteEvent;
 import cn.nukkit.event.block.LeavesDecayEvent;
 import cn.nukkit.event.player.PlayerInteractEvent;
+import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
 import cn.nukkit.event.player.PlayerMoveEvent;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
 import cn.nukkit.level.particle.FloatingTextParticle;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.TextFormat;
@@ -25,6 +28,7 @@ public class Locations implements Listener {
 
     public MintPlay plugin;
     public HashMap<String, Location> locations = new HashMap<>();
+    public HashMap<Vector3, FloatingTextParticle> particles = new HashMap<>();
     public int loadingTime = 40;
 
     public Locations(MintPlay plugin) {
@@ -33,9 +37,18 @@ public class Locations implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        for(Map.Entry<String, Portal> portalEntry : getLocation(player).getPortals().entrySet()) {
+            String portalName = portalEntry.getKey();
+            addFloatingText(getLocation(portalName));
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerLocallyInitialized(PlayerLocallyInitializedEvent event) {
         Player player = event.getPlayer();
-        addFloatingText(player, getLocation(player));
+        addFloatingText(player);
         //TODO: fix slab quit/join bug, when player spawns under location
     }
 
@@ -75,6 +88,11 @@ public class Locations implements Listener {
         event.setCancelled(true);
     }
 
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onBlockBurn(BlockBurnEvent event) {
+        event.setCancelled(true);
+    }
+
     public void loadLocations() {
         for(Map.Entry<String, Object> locationEntry : plugin.getConfig().getSections("locations").entrySet()) {
             String locationName = locationEntry.getKey();
@@ -94,16 +112,26 @@ public class Locations implements Listener {
         return getLocation(level.getName());
     }
 
+    public Location getLocation(Spawn spawn) {
+        return getLocation(spawn.getLevel());
+    }
+
     public Location getLocation(Player player) {
         return getLocation(player.getLevel());
     }
 
+    public HashMap<String, Location> getLocations() {
+        return locations;
+    }
+
     public void teleport(Player player, Spawn spawn) {
+        Location oldLocation = getLocation(player);
+        Location newLocation = getLocation(spawn);
         player.setImmobile(true);
         player.addEffect(Effect.getEffect(Effect.BLINDNESS).setDuration(loadingTime));
         player.teleport(spawn);
-        Location newLocation = getLocation(spawn.getLevel());
-        addFloatingText(player, newLocation);
+        addFloatingText(oldLocation);
+        addFloatingText(newLocation);
         plugin.scoreboards.updateTag(player, "location", newLocation.getName());
         plugin.getServer().getScheduler().scheduleDelayedTask(plugin, () -> {
             player.setImmobile(false);
@@ -111,16 +139,34 @@ public class Locations implements Listener {
         }, loadingTime);
     }
 
+    public void addFloatingText(Location location) {
+        for(Player player : location.getPlayers()) {
+            addFloatingText(player);
+        }
+    }
+
+    public void addFloatingText(Player player) {
+        addFloatingText(player, getLocation(player));
+    }
+
     public void addFloatingText(Player player, Location location) {
         for(Map.Entry<String, Portal> portalEntry : location.getPortals().entrySet()) {
             String portalName = portalEntry.getKey();
             Portal portal = portalEntry.getValue();
+            Vector3 position = portal.getFloatingTextPosition();
             Location targetLocation = getLocation(portalName);
-            location.getLevel().addParticle(new FloatingTextParticle(portal.getFloatingTextPosition(), TextFormat.YELLOW + targetLocation.getName(), TextFormat.YELLOW + "Игроков: " + targetLocation.getLevel().getPlayers().size()), player);
+            String title = TextFormat.YELLOW + targetLocation.getName();
+            String text = TextFormat.YELLOW + "Игроков: " + targetLocation.getPlayers().size();
+            FloatingTextParticle particle;
+            if(particles.containsKey(position)) {
+                particle = particles.get(position);
+                particle.setTitle(title);
+                particle.setText(text);
+            } else {
+                particle = new FloatingTextParticle(position, title, text);
+                particles.put(position, particle);
+            }
+            location.getLevel().addParticle(particle, player);
         }
-    }
-
-    public HashMap<String, Location> getLocations() {
-        return locations;
     }
 }

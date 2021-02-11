@@ -55,7 +55,7 @@ public class Scoreboards implements Listener {
         Player player = event.getPlayer();
         scoreboards.remove(player);
         tags.remove(player);
-        updateTag("online", getOnline());
+        updateTag("online", String.valueOf(plugin.getServer().getOnlinePlayers().size() - 1));
     }
 
     public HashMap<String, String> createTags(Player player) {
