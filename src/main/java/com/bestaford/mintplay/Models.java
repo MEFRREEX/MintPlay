@@ -2,7 +2,6 @@ package com.bestaford.mintplay;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
-import cn.nukkit.level.Level;
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.tag.CompoundTag;
 import com.bestaford.mintplay.utils.Model;
@@ -20,17 +19,6 @@ public class Models {
     public Models(MintPlay plugin) {
         this.plugin = plugin;
         Entity.registerEntity("Model", Model.class);
-    }
-
-    public void clean() {
-        for(Level level : plugin.getServer().getLevels().values()) {
-            for(Entity entity : level.getEntities()) {
-                if(entity instanceof Model) {
-                    level.removeEntity(entity);
-                }
-            }
-            level.save();
-        }
     }
 
     public static Skin createSkin(String name, Path skinPath, Path geometryPath) throws IOException {

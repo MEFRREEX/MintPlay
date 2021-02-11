@@ -113,4 +113,8 @@ public class Locations implements Listener {
             location.getLevel().addParticle(new FloatingTextParticle(portal.getFloatingTextPosition(), TextFormat.YELLOW + targetLocation.getName(), TextFormat.YELLOW + "Игроков: " + targetLocation.getLevel().getPlayers().size()), player);
         }
     }
+
+    public HashMap<String, Location> getLocations() {
+        return locations;
+    }
 }
