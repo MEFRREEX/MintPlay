@@ -26,6 +26,8 @@ public class MintPlay extends PluginBase {
         getServer().getPluginManager().registerEvents(locations, this);
         getServer().getPluginManager().registerEvents(scoreboards, this);
         getServer().getPluginManager().registerEvents(models, this);
+        //TODO: replace model damage cancelling to Model class
+        models.clean();
     }
 
     public String replaceAll(String text, Player player) {
