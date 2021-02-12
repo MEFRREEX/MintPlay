@@ -25,8 +25,6 @@ public class MintPlay extends PluginBase {
         getServer().getPluginManager().registerEvents(authorization, this);
         getServer().getPluginManager().registerEvents(locations, this);
         getServer().getPluginManager().registerEvents(scoreboards, this);
-        //TODO: refresh floating text info for all players when someone join portal
-        //TODO: cancel growing of лоза
     }
 
     public String replaceAll(String text, Player player) {
