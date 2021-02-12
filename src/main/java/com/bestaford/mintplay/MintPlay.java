@@ -26,17 +26,4 @@ public class MintPlay extends PluginBase {
         getServer().getPluginManager().registerEvents(locations, this);
         getServer().getPluginManager().registerEvents(scoreboards, this);
     }
-
-    public String replaceAll(String text, Player player) {
-        text = text.replaceAll("%server", getConfig().getString("server"));
-        text = text.replaceAll("%location", locations.getLocation(player).getName());
-        text = text.replaceAll("%online", String.valueOf(getServer().getOnlinePlayers().size()));
-        text = text.replaceAll("%max", String.valueOf(getServer().getMaxPlayers()));
-        text = text.replaceAll("%name", player.getName());
-        text = text.replaceAll("%time", new SimpleDateFormat("HH:mm").format(new Date()));
-        text = text.replaceAll("%date", new SimpleDateFormat("dd.MM.yyyy").format(new Date()));
-        text = text.replaceAll("%tps", getServer().getTicksPerSecond() + " (" + getServer().getTickUsage() + ")");
-        text = text.replaceAll("%avg", getServer().getTicksPerSecondAverage() + " (" + getServer().getTickUsageAverage() + ")");
-        return text;
-    }
 }

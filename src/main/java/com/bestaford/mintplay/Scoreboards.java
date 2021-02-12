@@ -86,7 +86,7 @@ public class Scoreboards implements Listener {
 
     public Scoreboard createScoreboard(Player player) {
         ConfigSection scoreboardSection = plugin.getConfig().getSection("scoreboard");
-        String title = plugin.replaceAll(scoreboardSection.getString("title"), player);
+        String title = scoreboardSection.getString("title").replaceAll("%server", plugin.getConfig().getString("server"));
         List<String> lines = scoreboardSection.getStringList("lines");
         Scoreboard scoreboard = ScoreboardAPI.createScoreboard();
         ScoreboardDisplay scoreboardDisplay = scoreboard.addDisplay(DisplaySlot.SIDEBAR, title, title, SortOrder.ASCENDING);
