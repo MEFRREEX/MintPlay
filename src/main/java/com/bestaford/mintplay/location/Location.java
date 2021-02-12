@@ -7,24 +7,33 @@ import cn.nukkit.utils.ConfigSection;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Location {
 
     public String name;
     public Level level;
     public Spawn spawn;
-    public HashMap<String, Portal> portals;
+    public HashMap<String, Portal> portals = new HashMap<>();
+    public HashMap<UUID, Player> players = new HashMap<>();
 
     public Location(ConfigSection locationSection, Level level) {
         this.name = locationSection.getString("name");
         this.level = level;
         this.spawn = new Spawn(locationSection.getSection("spawn"), level);
-        this.portals = new HashMap<>();
         for(Map.Entry<String, Object> portalEntry : locationSection.getSections("portals").entrySet()) {
             String portalName = portalEntry.getKey();
             ConfigSection portalSection = (ConfigSection) portalEntry.getValue();
             portals.put(portalName, new Portal(portalSection));
         }
+    }
+
+    public void onPlayerJoin(Player player) {
+        players.put(player.getUniqueId(), player);
+    }
+
+    public void onPlayerQuit(Player player) {
+        players.remove(player.getUniqueId());
     }
 
     public String getName() {
@@ -44,6 +53,6 @@ public class Location {
     }
 
     public Collection<Player> getPlayers() {
-        return level.getPlayers().values();
+        return players.values();
     }
 }

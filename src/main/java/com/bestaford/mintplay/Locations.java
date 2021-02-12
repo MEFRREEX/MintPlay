@@ -36,15 +36,16 @@ public class Locations implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
         Location location = getLocation(player);
-        updateFloatingText(location, true);
+        location.onPlayerJoin(player);
+        updateFloatingText(location);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent event) {
         Player player = event.getPlayer();
         Location location = getLocation(player);
-        player.close();
-        updateFloatingText(location, true);
+        location.onPlayerQuit(player);
+        updateFloatingText(location);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -121,17 +122,23 @@ public class Locations implements Listener {
 
     public void teleport(Player player, Spawn spawn) {
         Location oldLocation = getLocation(player);
+        oldLocation.onPlayerQuit(player);
+        updateFloatingText(oldLocation);
+        player.teleport(spawn);
         Location newLocation = getLocation(spawn);
+        newLocation.onPlayerJoin(player);
+        updateFloatingText(newLocation);
+        plugin.scoreboards.updateTag(player, "location", newLocation.getName());
         player.setImmobile(true);
         player.addEffect(Effect.getEffect(Effect.BLINDNESS).setDuration(40));
-        player.teleport(spawn);
-        updateFloatingText(oldLocation, true);
-        updateFloatingText(newLocation, true);
-        plugin.scoreboards.updateTag(player, "location", newLocation.getName());
         plugin.getServer().getScheduler().scheduleDelayedTask(plugin, () -> {
             player.setImmobile(false);
             player.sendTitle(TextFormat.BOLD.toString() + TextFormat.YELLOW.toString() + newLocation.getName(), "", 20, 40, 20);
         }, 40);
+    }
+
+    public void updateFloatingText(Location location) {
+        updateFloatingText(location, true);
     }
 
     public void updateFloatingText(Location location, boolean updateNeighbors) {
