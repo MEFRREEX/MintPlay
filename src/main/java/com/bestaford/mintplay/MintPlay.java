@@ -10,7 +10,6 @@ public class MintPlay extends PluginBase {
     public Authorization authorization;
     public Locations locations;
     public Scoreboards scoreboards;
-    public Models models;
 
     @Override
     public void onEnable() {
@@ -19,11 +18,9 @@ public class MintPlay extends PluginBase {
         authorization = new Authorization(this);
         locations = new Locations(this);
         scoreboards = new Scoreboards(this);
-        models = new Models(this);
         getServer().getPluginManager().registerEvents(authorization, this);
         getServer().getPluginManager().registerEvents(locations, this);
         getServer().getPluginManager().registerEvents(scoreboards, this);
-        //TODO: remove Models module, move static methods to Model util
         //TODO: move welcome text to config
         //TODO: Locations neighbors update in separate method
         //TODO: reduce scoreboard update times
