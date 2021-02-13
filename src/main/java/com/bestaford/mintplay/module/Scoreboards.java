@@ -35,6 +35,8 @@ public class Scoreboards implements Listener {
             updateTag("tps", getTPS());
             updateTag("avg", getAVG());
         }, 20);
+        //TODO: reduce scoreboard update times
+        //TODO: check time and date updates
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

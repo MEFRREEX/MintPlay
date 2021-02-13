@@ -39,6 +39,8 @@ public class Locations implements Listener {
         Location location = getLocation(player);
         location.onPlayerJoin(player);
         updateFloatingText(location);
+        //TODO: fix spawn under location when quit on slab
+        //TODO: teleport to location on join
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -96,6 +98,8 @@ public class Locations implements Listener {
             ConfigSection locationSection = (ConfigSection) locationEntry.getValue();
             if(plugin.getServer().loadLevel(locationName)) {
                 Level level = plugin.getServer().getLevelByName(locationName);
+                //TODO: reset level time to 0 on load
+                //TODO: sync ingame time with real server time
                 locations.put(locationName, new Location(locationSection, level));
             }
         }
@@ -147,6 +151,7 @@ public class Locations implements Listener {
             addFloatingText(player, location);
         }
         if(updateNeighbors) {
+            //TODO: Locations neighbors update in separate method
             for(String portalName : location.getPortals().keySet()) {
                 updateFloatingText(getLocation(portalName), false);
             }
