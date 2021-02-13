@@ -98,7 +98,9 @@ public class Locations implements Listener {
             ConfigSection locationSection = (ConfigSection) locationEntry.getValue();
             if(plugin.getServer().loadLevel(locationName)) {
                 Level level = plugin.getServer().getLevelByName(locationName);
-                //TODO: reset level time to 0 on load
+                level.setRaining(false);
+                level.setThundering(false);
+                level.setTime(0);
                 //TODO: sync ingame time with real server time
                 locations.put(locationName, new Location(locationSection, level));
             }
