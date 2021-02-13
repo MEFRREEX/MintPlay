@@ -145,17 +145,13 @@ public class Locations implements Listener {
     }
 
     public void updateFloatingText(Location location) {
-        updateFloatingText(location, true);
-    }
-
-    public void updateFloatingText(Location location, boolean updateNeighbors) {
         for(Player player : location.getPlayers()) {
             addFloatingText(player, location);
         }
-        if(updateNeighbors) {
-            //TODO: Locations neighbors update in separate method
-            for(String portalName : location.getPortals().keySet()) {
-                updateFloatingText(getLocation(portalName), false);
+        for(String portalName : location.getPortals().keySet()) {
+            Location targetLocation = getLocation(portalName);
+            for(Player player : targetLocation.getPlayers()) {
+                addFloatingText(player, targetLocation);
             }
         }
     }

@@ -27,8 +27,6 @@ public class Location {
             portals.put(portalName, new Portal(portalSection));
         }
         //TODO: restrict world editing
-        //TODO: location.getSpawn(Vector3 position) returns spawn with level
-        //TODO: location.getSpawn(portal.getSpawn())
     }
 
     public void onPlayerJoin(Player player) {
