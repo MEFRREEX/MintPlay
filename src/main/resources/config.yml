@@ -17,6 +17,9 @@ authorization:
   exit:
     title: "Выход"
     content: "Вы уверены, что хотите выйти?"
+  welcome:
+    title: "%server"
+    subtitle: "Вы уже вводили пароль. Приятной игры!"
 
 scoreboard:
   title: "%server"

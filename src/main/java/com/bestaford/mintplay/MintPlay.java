@@ -21,7 +21,6 @@ public class MintPlay extends PluginBase {
         getServer().getPluginManager().registerEvents(authorization, this);
         getServer().getPluginManager().registerEvents(locations, this);
         getServer().getPluginManager().registerEvents(scoreboards, this);
-        //TODO: move welcome text to config
         //TODO: Locations neighbors update in separate method
         //TODO: reduce scoreboard update times
         //TODO: check time and date updates

@@ -198,7 +198,9 @@ public class Authorization implements Listener {
     }
 
     public void welcome(Player player) {
-        player.sendTitle(TextFormat.GREEN + "MintPlay", plugin.getServer().getOnlinePlayers().size() + "/" + plugin.getServer().getMaxPlayers());
+        ConfigSection authorizationSection = plugin.getConfig().getSection("authorization");
+        ConfigSection welcomeSection = authorizationSection.getSection("welcome");
+        player.sendTitle(welcomeSection.getString("title").replaceAll("%server", plugin.getConfig().getString("server")), welcomeSection.getString("subtitle"));
         player.setImmobile(false);
     }
 
