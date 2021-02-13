@@ -29,8 +29,6 @@ scoreboard:
     - "§eОнлайн: §r%online/%max"
     - "§eВремя: §r%time"
     - "§eДата: §r%date"
-    - "§eТРS: §r%tps"
-    - "§eАVG: §r%avg"
 
 locations:
   town:

@@ -26,17 +26,27 @@ public class Scoreboards implements Listener {
     public MintPlay plugin;
     public HashMap<Player, Scoreboard> scoreboards = new HashMap<>();
     public HashMap<Player, HashMap<String, String>> tags = new HashMap<>();
+    public String time;
+    public String date;
 
     public Scoreboards(MintPlay plugin) {
         this.plugin = plugin;
+        this.time = getTime();
+        this.date = getDate();
         plugin.getServer().getScheduler().scheduleRepeatingTask(plugin, () -> {
-            updateTag("time", getTime());
-            updateTag("date", getDate());
-            updateTag("tps", getTPS());
-            updateTag("avg", getAVG());
+            String newTime = getTime();
+            if(!time.equals(newTime)) {
+                updateTag("time", newTime);
+                time = newTime;
+            }
+            String newDate = getDate();
+            if(!date.equals(newDate)) {
+                updateTag("date", newDate);
+                date = newDate;
+            }
+            //updateTag("tps", getTPS());
+            //updateTag("avg", getAVG());
         }, 20);
-        //TODO: reduce scoreboard update times
-        //TODO: check time and date updates
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -69,8 +79,8 @@ public class Scoreboards implements Listener {
         tags.put("max", getMax());
         tags.put("time", getTime());
         tags.put("date", getDate());
-        tags.put("tps", getTPS());
-        tags.put("avg", getAVG());
+        //tags.put("tps", getTPS());
+        //tags.put("avg", getAVG());
         return tags;
     }
 
