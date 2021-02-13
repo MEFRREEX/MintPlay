@@ -1,4 +1,4 @@
-package com.bestaford.mintplay;
+package com.bestaford.mintplay.module;
 
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
@@ -8,6 +8,7 @@ import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerLocallyInitializedEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.utils.ConfigSection;
+import com.bestaford.mintplay.MintPlay;
 import de.lucgameshd.scoreboard.api.ScoreboardAPI;
 import de.lucgameshd.scoreboard.network.DisplaySlot;
 import de.lucgameshd.scoreboard.network.Scoreboard;

@@ -1,4 +1,4 @@
-package com.bestaford.mintplay.utils;
+package com.bestaford.mintplay.util;
 
 public enum Characters {
 

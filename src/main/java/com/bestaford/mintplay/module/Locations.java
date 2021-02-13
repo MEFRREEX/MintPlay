@@ -1,4 +1,4 @@
-package com.bestaford.mintplay;
+package com.bestaford.mintplay.module;
 
 import cn.nukkit.Player;
 import cn.nukkit.block.Block;
@@ -16,6 +16,7 @@ import cn.nukkit.math.Vector3;
 import cn.nukkit.potion.Effect;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.TextFormat;
+import com.bestaford.mintplay.MintPlay;
 import com.bestaford.mintplay.location.*;
 
 import java.util.HashMap;

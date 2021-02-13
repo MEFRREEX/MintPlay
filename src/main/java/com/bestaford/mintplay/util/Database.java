@@ -1,4 +1,4 @@
-package com.bestaford.mintplay.utils;
+package com.bestaford.mintplay.util;
 
 import com.bestaford.mintplay.MintPlay;
 import com.google.common.base.Charsets;

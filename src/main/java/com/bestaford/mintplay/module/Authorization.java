@@ -1,4 +1,4 @@
-package com.bestaford.mintplay;
+package com.bestaford.mintplay.module;
 
 import cn.nukkit.Player;
 import cn.nukkit.event.EventHandler;
@@ -8,6 +8,7 @@ import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.*;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.TextFormat;
+import com.bestaford.mintplay.MintPlay;
 import ru.nukkitx.forms.elements.CustomForm;
 import ru.nukkitx.forms.elements.ModalForm;
 

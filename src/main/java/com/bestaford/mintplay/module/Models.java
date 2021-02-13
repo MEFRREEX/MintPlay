@@ -1,10 +1,11 @@
-package com.bestaford.mintplay;
+package com.bestaford.mintplay.module;
 
 import cn.nukkit.entity.Entity;
 import cn.nukkit.entity.data.Skin;
 import cn.nukkit.level.Position;
 import cn.nukkit.nbt.tag.CompoundTag;
-import com.bestaford.mintplay.utils.Model;
+import com.bestaford.mintplay.MintPlay;
+import com.bestaford.mintplay.util.Model;
 
 import javax.imageio.ImageIO;
 import java.io.IOException;

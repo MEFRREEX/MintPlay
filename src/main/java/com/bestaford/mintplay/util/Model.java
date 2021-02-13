@@ -1,4 +1,4 @@
-package com.bestaford.mintplay.utils;
+package com.bestaford.mintplay.util;
 
 import cn.nukkit.entity.EntityHuman;
 import cn.nukkit.event.entity.EntityDamageEvent;
