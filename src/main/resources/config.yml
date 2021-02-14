@@ -33,6 +33,7 @@ scoreboard:
 locations:
   town:
     name: "Город"
+    restricted: true
     spawn:
       x: 2444
       y: 80
@@ -58,6 +59,7 @@ locations:
           side: 1
   park:
     name: "Парк"
+    restricted: true
     spawn:
       x: 972
       y: 47

@@ -7,9 +7,9 @@ import cn.nukkit.utils.ConfigSection;
 
 public class Portal {
 
-    public AxisAlignedBB boundingBox;
-    public Vector3 floatingTextPosition;
-    public Spawn spawn;
+    private final AxisAlignedBB boundingBox;
+    private final Vector3 floatingTextPosition;
+    private final Spawn spawn;
 
     public Portal(ConfigSection portalSection) {
         ConfigSection boundingBoxSection = portalSection.getSection("boundingBox");

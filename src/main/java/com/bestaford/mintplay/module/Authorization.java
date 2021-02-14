@@ -20,8 +20,8 @@ import java.util.UUID;
 
 public class Authorization implements Listener {
 
-    public MintPlay plugin;
-    public HashMap<String, UUID> players = new HashMap<>();
+    private final MintPlay plugin;
+    private final HashMap<String, UUID> players = new HashMap<>();
 
     public Authorization(MintPlay plugin) {
         this.plugin = plugin;

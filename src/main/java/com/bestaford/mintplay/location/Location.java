@@ -11,14 +11,16 @@ import java.util.UUID;
 
 public class Location {
 
-    public String name;
-    public Level level;
-    public Spawn spawn;
-    public HashMap<String, Portal> portals = new HashMap<>();
-    public HashMap<UUID, Player> players = new HashMap<>();
+    private final String name;
+    private final boolean restricted;
+    private final Level level;
+    private final Spawn spawn;
+    private final HashMap<String, Portal> portals = new HashMap<>();
+    private final HashMap<UUID, Player> players = new HashMap<>();
 
     public Location(ConfigSection locationSection, Level level) {
         this.name = locationSection.getString("name");
+        this.restricted = locationSection.getBoolean("restricted");
         this.level = level;
         this.spawn = new Spawn(locationSection.getSection("spawn"), level);
         for(Map.Entry<String, Object> portalEntry : locationSection.getSections("portals").entrySet()) {
@@ -39,6 +41,10 @@ public class Location {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isRestricted() {
+        return restricted;
     }
 
     public Level getLevel() {

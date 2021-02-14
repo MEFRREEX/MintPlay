@@ -23,11 +23,11 @@ import java.util.Map;
 
 public class Scoreboards implements Listener {
 
-    public MintPlay plugin;
-    public HashMap<Player, Scoreboard> scoreboards = new HashMap<>();
-    public HashMap<Player, HashMap<String, String>> tags = new HashMap<>();
-    public String time;
-    public String date;
+    private final MintPlay plugin;
+    private final HashMap<Player, Scoreboard> scoreboards = new HashMap<>();
+    private final HashMap<Player, HashMap<String, String>> tags = new HashMap<>();
+    private String time;
+    private String date;
 
     public Scoreboards(MintPlay plugin) {
         this.plugin = plugin;
@@ -123,6 +123,7 @@ public class Scoreboards implements Listener {
     }
 
     public String getOnline() {
+        //TODO: take online players from auth module
         return String.valueOf(plugin.getServer().getOnlinePlayers().size());
     }
 

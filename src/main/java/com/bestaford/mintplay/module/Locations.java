@@ -25,10 +25,10 @@ import java.util.Map;
 
 public class Locations implements Listener {
 
-    public MintPlay plugin;
-    public HashMap<String, Location> locations = new HashMap<>();
-    public HashMap<Vector3, FloatingTextParticle> particles = new HashMap<>();
-    public int loadingTime = 40;
+    private final MintPlay plugin;
+    private final HashMap<String, Location> locations = new HashMap<>();
+    private final HashMap<Vector3, FloatingTextParticle> particles = new HashMap<>();
+    private final int loadingTime = 40;
 
     public Locations(MintPlay plugin) {
         this.plugin = plugin;

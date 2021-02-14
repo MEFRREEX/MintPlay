@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 
 public class Database {
 
-    public MintPlay plugin;
+    private final MintPlay plugin;
     public Connection connection;
 
     public Database(MintPlay plugin, String name) {
