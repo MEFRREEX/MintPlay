@@ -18,6 +18,7 @@ import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.TextFormat;
 import com.bestaford.mintplay.MintPlay;
 import com.bestaford.mintplay.location.*;
+import com.bestaford.mintplay.util.PlayerData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -40,8 +41,10 @@ public class Locations implements Listener {
         Location location = getLocation(player);
         location.onPlayerJoin(player);
         updateFloatingText(location);
-        //TODO: fix spawn under location when quit on slab
-        //TODO: teleport to location on join
+        PlayerData playerData = plugin.authorization.getPlayerData(player);
+        if(playerData.isRegistered()) {
+            player.teleport(new Vector3(playerData.getX(), playerData.getY(), playerData.getZ()));
+        }
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
