@@ -6,16 +6,15 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.*;
-import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.TextFormat;
 import com.bestaford.mintplay.MintPlay;
+import com.bestaford.mintplay.util.PlayerData;
 import ru.nukkitx.forms.elements.CustomForm;
 import ru.nukkitx.forms.elements.ModalForm;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -346,59 +345,6 @@ public class Authorization implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if(event.getEntity() instanceof Player) {
             event.setCancelled(!isLogined((Player) event.getEntity()));
-        }
-    }
-
-    public static class PlayerData {
-
-        private final boolean registered;
-        private String password;
-        private String address;
-        private String uuid;
-        private double x;
-        private double y;
-        private double z;
-
-        public PlayerData(ResultSet resultSet) throws SQLException {
-            this.registered = true;
-            this.password = resultSet.getString("password");
-            this.address = resultSet.getString("address");
-            this.uuid = resultSet.getString("uuid");
-            this.x = resultSet.getDouble("x");
-            this.y = resultSet.getDouble("y");
-            this.z = resultSet.getDouble("z");
-        }
-
-        public PlayerData() {
-            this.registered = false;
-        }
-
-        public boolean isRegistered() {
-            return registered;
-        }
-
-        public String getPassword() {
-            return password;
-        }
-
-        public String getAddress() {
-            return address;
-        }
-
-        public String getUniqueId() {
-            return uuid;
-        }
-
-        public double getX() {
-            return x;
-        }
-
-        public double getY() {
-            return Math.ceil(y);
-        }
-
-        public double getZ() {
-            return z;
         }
     }
 }
