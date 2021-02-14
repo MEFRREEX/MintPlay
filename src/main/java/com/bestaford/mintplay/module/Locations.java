@@ -49,7 +49,6 @@ public class Locations implements Listener {
         Location location = getLocation(player);
         location.onPlayerQuit(player);
         updateFloatingText(location);
-        savePlayerData(player);
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -176,9 +175,5 @@ public class Locations implements Listener {
             }
             location.getLevel().addParticle(particle, player);
         }
-    }
-
-    public void savePlayerData(Player player) {
-        //TODO: save player data in db
     }
 }

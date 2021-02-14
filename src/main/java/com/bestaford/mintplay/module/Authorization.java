@@ -6,6 +6,7 @@ import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.player.*;
+import cn.nukkit.math.Vector3;
 import cn.nukkit.utils.ConfigSection;
 import cn.nukkit.utils.TextFormat;
 import com.bestaford.mintplay.MintPlay;
@@ -14,6 +15,7 @@ import ru.nukkitx.forms.elements.ModalForm;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -38,6 +40,14 @@ public class Authorization implements Listener {
             }
         } else {
             sendRegistrationForm(player);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if(isRegistered(player)) {
+            savePlayerData(player);
         }
     }
 
@@ -110,15 +120,7 @@ public class Authorization implements Listener {
     }
 
     public boolean isRegistered(Player player) {
-        try {
-            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("SELECT * FROM players WHERE name = ?");
-            preparedStatement.setString(1, player.getName());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            return resultSet.next();
-        } catch (Exception exception) {
-            plugin.getLogger().error(exception.getMessage());
-        }
-        return false;
+        return getPlayerData(player).isRegistered();
     }
 
     public void sendLoginForm(Player player) {
@@ -168,18 +170,10 @@ public class Authorization implements Listener {
     }
 
     public boolean login(Player player, String password) {
-        try {
-            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("SELECT password FROM players WHERE name = ?");
-            preparedStatement.setString(1, player.getName());
-            ResultSet resultSet = preparedStatement.executeQuery();
-            resultSet.next();
-            if(resultSet.getString("password").equals(password)) {
-                players.put(player.getName(), player.getUniqueId());
-                player.setImmobile(false);
-                return true;
-            }
-        } catch (Exception exception) {
-            plugin.getLogger().error(exception.getMessage());
+        if(getPlayerData(player).getPassword().equals(password)) {
+            players.put(player.getName(), player.getUniqueId());
+            player.setImmobile(false);
+            return true;
         }
         return false;
     }
@@ -197,6 +191,35 @@ public class Authorization implements Listener {
         ConfigSection welcomeSection = authorizationSection.getSection("welcome");
         player.sendTitle(welcomeSection.getString("title").replaceAll("%server", plugin.getConfig().getString("server")), welcomeSection.getString("subtitle"));
         player.setImmobile(false);
+    }
+
+    public void savePlayerData(Player player) {
+        try {
+            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("UPDATE players SET address = ?, uuid = ?, x = ?, y = ?, z = ? WHERE name = ?");
+            preparedStatement.setString(1, player.getAddress());
+            preparedStatement.setString(2, player.getUniqueId().toString());
+            preparedStatement.setDouble(3, player.getX());
+            preparedStatement.setDouble(4, player.getY());
+            preparedStatement.setDouble(5, player.getZ());
+            preparedStatement.setString(6, player.getName());
+            preparedStatement.execute();
+        } catch (Exception exception) {
+            plugin.getLogger().error(exception.getMessage());
+        }
+    }
+
+    public PlayerData getPlayerData(Player player) {
+        try {
+            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("SELECT * FROM players WHERE name = ?");
+            preparedStatement.setString(1, player.getName());
+            ResultSet resultSet = preparedStatement.executeQuery();
+            if(resultSet.next()) {
+                return new PlayerData(resultSet);
+            }
+        } catch (Exception exception) {
+            plugin.getLogger().error(exception.getMessage());
+        }
+        return new PlayerData();
     }
 
     @EventHandler(priority = EventPriority.HIGHEST)
@@ -323,6 +346,59 @@ public class Authorization implements Listener {
     public void onEntityDamage(EntityDamageEvent event) {
         if(event.getEntity() instanceof Player) {
             event.setCancelled(!isLogined((Player) event.getEntity()));
+        }
+    }
+
+    public static class PlayerData {
+
+        private final boolean registered;
+        private String password;
+        private String address;
+        private String uuid;
+        private double x;
+        private double y;
+        private double z;
+
+        public PlayerData(ResultSet resultSet) throws SQLException {
+            this.registered = true;
+            this.password = resultSet.getString("password");
+            this.address = resultSet.getString("address");
+            this.uuid = resultSet.getString("uuid");
+            this.x = resultSet.getDouble("x");
+            this.y = resultSet.getDouble("y");
+            this.z = resultSet.getDouble("z");
+        }
+
+        public PlayerData() {
+            this.registered = false;
+        }
+
+        public boolean isRegistered() {
+            return registered;
+        }
+
+        public String getPassword() {
+            return password;
+        }
+
+        public String getAddress() {
+            return address;
+        }
+
+        public String getUniqueId() {
+            return uuid;
+        }
+
+        public double getX() {
+            return x;
+        }
+
+        public double getY() {
+            return Math.ceil(y);
+        }
+
+        public double getZ() {
+            return z;
         }
     }
 }
