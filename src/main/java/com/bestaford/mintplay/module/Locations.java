@@ -27,6 +27,7 @@ public class Locations implements Listener {
     public MintPlay plugin;
     public HashMap<String, Location> locations = new HashMap<>();
     public HashMap<Vector3, FloatingTextParticle> particles = new HashMap<>();
+    public int loadingTime = 40;
 
     public Locations(MintPlay plugin) {
         this.plugin = plugin;
@@ -115,8 +116,8 @@ public class Locations implements Listener {
         return getLocation(level.getName());
     }
 
-    public Location getLocation(Spawn spawn) {
-        return getLocation(spawn.getLevel());
+    public Location getLocation(cn.nukkit.level.Location location) {
+        return getLocation(location.getLevel());
     }
 
     public Location getLocation(Player player) {
@@ -127,21 +128,23 @@ public class Locations implements Listener {
         return locations;
     }
 
-    public void teleport(Player player, Spawn spawn) {
+    public void teleport(Player player, cn.nukkit.level.Location target) {
         Location oldLocation = getLocation(player);
-        oldLocation.onPlayerQuit(player);
-        updateFloatingText(oldLocation);
-        player.teleport(spawn);
-        Location newLocation = getLocation(spawn);
-        newLocation.onPlayerJoin(player);
-        updateFloatingText(newLocation);
-        plugin.scoreboards.updateTag(player, "location", newLocation.getName());
+        Location newLocation = getLocation(target);
+        player.teleport(target);
+        if(!oldLocation.equals(newLocation)) {
+            oldLocation.onPlayerQuit(player);
+            updateFloatingText(oldLocation);
+            newLocation.onPlayerJoin(player);
+            updateFloatingText(newLocation);
+            plugin.scoreboards.updateTag(player, "location", newLocation.getName());
+        }
         player.setImmobile(true);
-        player.addEffect(Effect.getEffect(Effect.BLINDNESS).setDuration(40));
+        player.addEffect(Effect.getEffect(Effect.BLINDNESS).setDuration(loadingTime));
         plugin.getServer().getScheduler().scheduleDelayedTask(plugin, () -> {
             player.setImmobile(false);
-            player.sendTitle(TextFormat.BOLD.toString() + TextFormat.YELLOW.toString() + newLocation.getName(), "", 20, 40, 20);
-        }, 40);
+            player.sendTitle(TextFormat.BOLD.toString() + TextFormat.YELLOW.toString() + newLocation.getName(), "", loadingTime / 2, loadingTime, loadingTime / 2);
+        }, loadingTime);
     }
 
     public void updateFloatingText(Location location) {
