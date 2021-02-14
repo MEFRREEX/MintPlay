@@ -93,7 +93,7 @@ public class Authorization implements Listener {
             return false;
         }
         try {
-            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("INSERT INTO players (name, password, address, uuid, x, y, z, yaw, pitch, location, level, experience) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("INSERT INTO players (name, password, address, uuid, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)");
             preparedStatement.setString(1, player.getName());
             preparedStatement.setString(2, password);
             preparedStatement.setString(3, player.getAddress());
@@ -101,11 +101,6 @@ public class Authorization implements Listener {
             preparedStatement.setDouble(5, player.getX());
             preparedStatement.setDouble(6, player.getY());
             preparedStatement.setDouble(7, player.getZ());
-            preparedStatement.setDouble(8, player.getYaw());
-            preparedStatement.setDouble(9, player.getPitch());
-            preparedStatement.setString(10, player.getLevel().getName());
-            preparedStatement.setInt(11, 1);
-            preparedStatement.setInt(12, 0);
             preparedStatement.execute();
             return true;
         } catch (Exception exception) {

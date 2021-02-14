@@ -5,10 +5,5 @@ CREATE TABLE IF NOT EXISTS players (
     uuid TEXT,
     x REAL,
     y REAL,
-    z REAL,
-    yaw REAL,
-    pitch REAL,
-    location TEXT,
-    level INTEGER,
-    experience INTEGER
+    z REAL
 );
