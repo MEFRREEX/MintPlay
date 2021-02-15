@@ -5,9 +5,7 @@ import cn.nukkit.block.Block;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
 import cn.nukkit.event.Listener;
-import cn.nukkit.event.block.BlockBurnEvent;
-import cn.nukkit.event.block.BlockIgniteEvent;
-import cn.nukkit.event.block.LeavesDecayEvent;
+import cn.nukkit.event.block.*;
 import cn.nukkit.event.player.*;
 import cn.nukkit.item.Item;
 import cn.nukkit.level.Level;
@@ -19,7 +17,10 @@ import cn.nukkit.utils.TextFormat;
 import com.bestaford.mintplay.MintPlay;
 import com.bestaford.mintplay.location.*;
 import com.bestaford.mintplay.util.PlayerData;
+import com.google.gson.Gson;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +33,9 @@ public class Locations implements Listener {
 
     public Locations(MintPlay plugin) {
         this.plugin = plugin;
+        plugin.database.createTable("blocks");
         loadLocations();
+        //TODO: move Location, Portal and Spawn into Locations class
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
@@ -82,18 +85,43 @@ public class Locations implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
+    public void onBlockPlace(BlockPlaceEvent event) {
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
+        if(isBlockExist(block)) {
+            event.setCancelled(true);
+        } else {
+            saveBlockData(block, player);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    public void onBlockBreak(BlockBreakEvent event) {
+        Player player = event.getPlayer();
+        Block block = event.getBlock();
+        if(isBlockExist(block)) {
+            removeBlockData(block);
+        } else {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
     public void onLeavesDecay(LeavesDecayEvent event) {
         event.setCancelled(true);
+        //TODO: check block in db
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockIgnite(BlockIgniteEvent event) {
         event.setCancelled(true);
+        //TODO: check block in db
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
     public void onBlockBurn(BlockBurnEvent event) {
         event.setCancelled(true);
+        //TODO: check block in db
     }
 
     public void loadLocations() {
@@ -181,5 +209,60 @@ public class Locations implements Listener {
             }
             location.getLevel().addParticle(particle, player);
         }
+    }
+
+    public String toJson(Block block) {
+        HashMap<String, String> data = new HashMap<>();
+        data.put("x", String.valueOf(block.getFloorX()));
+        data.put("y", String.valueOf(block.getFloorY()));
+        data.put("z", String.valueOf(block.getFloorZ()));
+        data.put("level", block.getLevel().getName());
+        return new Gson().toJson(data);
+
+    }
+
+    public boolean isBlockExist(Block block) {
+        try {
+            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("SELECT * FROM blocks WHERE position = ?");
+            preparedStatement.setString(1, toJson(block));
+            return preparedStatement.executeQuery().next();
+        } catch (Exception exception) {
+            plugin.getLogger().error(exception.getMessage());
+        }
+        return false;
+    }
+
+    public void saveBlockData(Block block, Player player) {
+        try {
+            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("INSERT INTO blocks (position, player) VALUES (?, ?)");
+            preparedStatement.setString(1, toJson(block));
+            preparedStatement.setString(2, player.getName());
+            preparedStatement.execute();
+        } catch (Exception exception) {
+            plugin.getLogger().error(exception.getMessage());
+        }
+    }
+
+    public void removeBlockData(Block block) {
+        try {
+            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("DELETE FROM blocks WHERE position = ?");
+            preparedStatement.setString(1, toJson(block));
+            preparedStatement.execute();
+        } catch (Exception exception) {
+            plugin.getLogger().error(exception.getMessage());
+        }
+    }
+
+    public String getBlockData(Block block) {
+        try {
+            PreparedStatement preparedStatement = plugin.database.connection.prepareStatement("SELECT player FROM blocks WHERE position = ?");
+            preparedStatement.setString(1, toJson(block));
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return resultSet.getString("player");
+        } catch (Exception exception) {
+            plugin.getLogger().error(exception.getMessage());
+        }
+        return null;
     }
 }

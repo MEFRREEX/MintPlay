@@ -18,7 +18,6 @@ public class Database {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + plugin.getDataFolder().getAbsolutePath() + "\\" + name + ".db");
-            createTable(name);
         } catch (Exception exception) {
             plugin.getLogger().error(exception.getMessage());
         }

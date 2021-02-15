@@ -25,6 +25,7 @@ public class Authorization implements Listener {
 
     public Authorization(MintPlay plugin) {
         this.plugin = plugin;
+        plugin.database.createTable("players");
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
