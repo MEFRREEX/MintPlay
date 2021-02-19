@@ -34,7 +34,8 @@ public class Authorization implements Listener {
         player.setImmobile(true);
         if(isRegistered(player)) {
             if(isLogined(player)) {
-                welcome(player);
+                player.setImmobile(false);
+                plugin.characters.sendCharacterCreateForm(player);
             } else {
                 sendLoginForm(player);
             }
@@ -74,6 +75,7 @@ public class Authorization implements Listener {
             String password = (String) data.get(error ? 2 : 1);
             if(register(targetPlayer, password)) {
                 targetPlayer.sendMessage(TextFormat.GREEN + registrationSection.getString("success"));
+                plugin.characters.sendCharacterCreateForm(player);
                 login(player, password);
             } else {
                 sendRegistrationForm(targetPlayer, true, password);
@@ -146,6 +148,7 @@ public class Authorization implements Listener {
             String password = (String) data.get(error ? 2 : 1);
             if(login(targetPlayer, password)) {
                 targetPlayer.sendMessage(TextFormat.GREEN + loginSection.getString("success"));
+                plugin.characters.sendCharacterCreateForm(player);
             } else {
                 sendLoginForm(targetPlayer, true);
             }
@@ -226,7 +229,7 @@ public class Authorization implements Listener {
     public void onPlayerMove(PlayerMoveEvent event) {
         event.setCancelled(!isLogined(event.getPlayer()));
     }
-
+    //TODO: убрать лишние ивенты и проверки
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerEatFood(PlayerEatFoodEvent event) {
         event.setCancelled(!isLogined(event.getPlayer()));

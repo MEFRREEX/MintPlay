@@ -93,6 +93,7 @@ public class Locations implements Listener {
         } else {
             saveBlockData(block, player);
         }
+        //TODO: restricted locations
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

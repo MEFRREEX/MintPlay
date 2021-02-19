@@ -21,6 +21,17 @@ authorization:
     title: "%server"
     subtitle: "Вы уже вводили пароль. Приятной игры!"
 
+characters:
+  create:
+    title: "Создание персонажа"
+    name:
+      name: "Имя персонажа"
+      placeholder: "Введите имя персонажа"
+      empty: "Необходимо ввести имя персонажа."
+      invalid: "Имя персонажа может содержать только латинские буквы."
+      taken: "Имя персонажа занято."
+
+
 scoreboard:
   title: "%server"
   lines:
